@@ -1,0 +1,127 @@
+/*
+ * Umby Beast Code — Perceptual OKLCH Semantic Token Foundation
+ * Compatible with Vanilla CSS and Tailwind CSS v4 (@theme).
+ * Tune --brand-hue (0-360) and --accent-hue to match the project's Creative Contract.
+ */
+
+:root {
+  --brand-hue: 255;
+  --accent-hue: 255;
+
+  /* Surfaces (Light Default) */
+  --bg-canvas: oklch(0.99 0.003 var(--brand-hue));
+  --bg-subtle: oklch(0.966 0.005 var(--brand-hue));
+  --bg-surface: oklch(1 0 0);
+  --bg-elevated: oklch(1 0 0);
+
+  /* Ink */
+  --ink-primary: oklch(0.165 0.012 var(--brand-hue));
+  --ink-secondary: oklch(0.41 0.014 var(--brand-hue));
+  --ink-muted: oklch(0.54 0.012 var(--brand-hue));
+  --ink-on-accent: oklch(0.99 0.002 var(--brand-hue));
+
+  /* Borders & Specular Lighting */
+  --border-hairline: oklch(0.165 0.012 var(--brand-hue) / 0.09);
+  --border-strong: oklch(0.165 0.012 var(--brand-hue) / 0.18);
+  --surface-specular: inset 0 1px 0 oklch(1 0 0 / 0.65);
+
+  /* Single High-Conviction Accent + Semantic Status */
+  --accent-primary: oklch(0.50 0.19 var(--accent-hue));
+  --accent-hover: oklch(0.45 0.19 var(--accent-hue));
+  --status-positive: oklch(0.52 0.15 152);
+  --status-warning: oklch(0.64 0.16 75);
+  --status-danger: oklch(0.53 0.20 25);
+
+  /* Fluid Typography */
+  --text-hero: clamp(2.5rem, 1.6rem + 3.8vw, 4.75rem);
+  --text-h1: clamp(1.875rem, 1.4rem + 2vw, 3rem);
+  --text-h2: clamp(1.375rem, 1.15rem + 0.9vw, 1.875rem);
+  --text-h3: 1.125rem;
+  --text-body-lg: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
+  --text-body: 1rem;
+  --text-caption: 0.8125rem;
+  --text-eyebrow: 0.75rem;
+
+  /* Concentric Radius System */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+
+  /* Elevation */
+  --shadow-subtle: 0 1px 2px oklch(0.15 0.01 var(--brand-hue) / 0.05);
+  --shadow-floating:
+    0 12px 32px -8px oklch(0.15 0.01 var(--brand-hue) / 0.12),
+    0 2px 6px -1px oklch(0.15 0.01 var(--brand-hue) / 0.06);
+
+  /* Motion Physics */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-stage: 420ms;
+}
+
+.dark,
+[data-theme="dark"] {
+  --bg-canvas: oklch(0.14 0.008 var(--brand-hue));
+  --bg-subtle: oklch(0.165 0.009 var(--brand-hue));
+  --bg-surface: oklch(0.185 0.010 var(--brand-hue));
+  --bg-elevated: oklch(0.225 0.012 var(--brand-hue));
+
+  --ink-primary: oklch(0.96 0.005 var(--brand-hue));
+  --ink-secondary: oklch(0.73 0.010 var(--brand-hue));
+  --ink-muted: oklch(0.58 0.010 var(--brand-hue));
+  --ink-on-accent: oklch(0.14 0.008 var(--brand-hue));
+
+  --border-hairline: oklch(0.98 0.005 var(--brand-hue) / 0.085);
+  --border-strong: oklch(0.98 0.005 var(--brand-hue) / 0.16);
+  --surface-specular: inset 0 1px 0 oklch(1 0 0 / 0.08);
+
+  --accent-primary: oklch(0.74 0.16 var(--accent-hue));
+  --accent-hover: oklch(0.79 0.15 var(--accent-hue));
+}
+
+/* Base Typographic & Accessibility Hygiene */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--bg-canvas);
+  color: var(--ink-primary);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  text-wrap: balance;
+}
+
+p, li {
+  text-wrap: pretty;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
