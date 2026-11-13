@@ -42,7 +42,7 @@ Write the answers to `.umby/critic/plan.md`.
 
 1. State in one sentence what is being built and its category (for example "online ordering app for a restaurant", "top-down roguelike", "B2B invoicing dashboard").
 2. Choose one aspect per critic from [`references/aspect-library.md`](references/aspect-library.md). Take the aspects that matter most for this category first. For a game, use the ten in `../umby-game-mode/references/ten-aspects.md`.
-3. For each aspect, name the benchmark: the product widely regarded as the best in this category **for that one aspect**. Different aspects usually have different benchmarks. If you have web access, check the pick. Label it an opinion when you cannot source it. If no clear leader exists, name two strong examples.
+3. For each aspect, name the benchmark: the highest-ranked product of this kind **for that one aspect**. Different aspects usually have different benchmarks. With web access, find it from current rankings, review aggregates, and awards for that specific craft, and note the source. Measure against the best even when the build is small; the score shows the distance. Without web access, use your best-known leader and label it `opinion`. If no clear leader exists, name two strong examples.
 4. A benchmark is a quality bar. Critics compare how well the job is done. Nothing is copied from it: no names, art, text, layouts, levels, or code.
 5. Add the aspect and benchmark table to `plan.md` and show it to the user before round 1.
 

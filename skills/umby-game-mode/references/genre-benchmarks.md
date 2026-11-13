@@ -1,6 +1,6 @@
 # Genre benchmarks
 
-Starting points for the benchmark table. These are commonly cited opinions, not measurements. Check a pick against a current source when you have web access, prefer the comparables the user named, and say "opinion" in the table when you could not source it.
+Fallback starting points for the benchmark table. The rule is to benchmark each aspect against the highest-ranked game of that style for that aspect, found from current rankings, review aggregates, and craft awards. Use this table only when you cannot look that up, and say "opinion" in the benchmark table when you do. These entries are commonly cited opinions, not measurements, and newer games may have overtaken them.
 
 A benchmark is a quality bar for one aspect. Study what makes it good at that aspect and aim for the same standard in an original game. Never copy its names, characters, art, music, levels, or look.
 
@@ -24,6 +24,9 @@ A benchmark is a quality bar for one aspect. Study what makes it good at that as
 | Idle or clicker | Decisions inside a number loop | Universal Paperclips |
 | Deck-builder | Run structure and synergy | Slay the Spire |
 | Deck-builder | Scoring clarity and fast feedback | Balatro |
+| Open world | World detail and exploration | Red Dead Redemption 2, The Legend of Zelda: Breath of the Wild |
+| Open world | Traversal and moment-to-moment play | Elden Ring, Marvel's Spider-Man |
+| Open world | Mission and city design | the Grand Theft Auto series (check the latest entry's standing) |
 
 For a genre not listed, ask the user which games it should feel like, then pick per aspect from those and from current "best of genre" coverage.
 

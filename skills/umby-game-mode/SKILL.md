@@ -33,7 +33,15 @@ Write the answers and a one-paragraph design pitch to `docs/design.md`. The pitc
 
 ## Step 2: Lock the benchmarks
 
-Open [`references/ten-aspects.md`](references/ten-aspects.md) and [`references/genre-benchmarks.md`](references/genre-benchmarks.md). For each of the ten aspects, name the game regarded as best in this genre **for that aspect**. Use the user's comparables where they fit. With web access, check each pick against a real source. Mark unsourced picks as opinion. Put the table in `docs/design.md` and show it to the user.
+Open [`references/ten-aspects.md`](references/ten-aspects.md) and [`references/genre-benchmarks.md`](references/genre-benchmarks.md). For each of the ten aspects, the benchmark is **the highest-ranked game of this style for that one aspect**. Pick it like this:
+
+1. **Define the style.** Use the genre and the user's comparables to say what style of game this is (for example "open-world action game", "2D precision platformer"). The comparables tell you the style. They are not automatically the benchmarks.
+2. **Find the top-ranked game per aspect.** With web access, look up who is ranked best in that style for each aspect: review-aggregate scores, year-end and all-time lists, and awards given for that specific craft (art direction, audio, game design, narrative, technical achievement). Take the one at the top. An open-world game's world and exploration would be measured against whichever open-world game currently ranks highest for that, such as Red Dead Redemption 2.
+3. **Use the best, whatever its budget.** A small game is still scored against the top of its style. The score shows the distance. The quality level the user chose decides how much of that distance has to be closed.
+4. **Record the source.** Put the ranking or award next to each pick. With no web access, fall back to the starter table, mark the pick `opinion`, and tell the user the benchmarks were not checked against current rankings.
+5. **Keep it current.** Rankings change as new games ship. Prefer a recent source over the starter table.
+
+Put the table in `docs/design.md` and show it to the user. They can swap any pick.
 
 This is the research gate. Wait for a go unless the user granted autonomy.
 
