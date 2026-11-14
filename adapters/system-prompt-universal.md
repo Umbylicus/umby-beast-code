@@ -1,6 +1,6 @@
 # Universal System Prompt (For Web Chat Surfaces Without Local Skill Folders)
 
-Paste this into Project Instructions (Claude Projects, ChatGPT Projects, Fable Web, Gemini Gems, Grok Workspaces) alongside attaching `umby-beast-code`, `umby-craft`, and `sick-social` reference files:
+Paste this into Project Instructions (Claude Projects, ChatGPT Projects, Fable Web, Gemini Gems, Grok Workspaces) alongside attaching `beast-code`, `craft`, and `sick-social` reference files:
 
 ---
 

@@ -6,7 +6,7 @@ Using a popular component library out of the box with default colors, default `0
 
 **The Billion-Dollar Rule for Open-Source Repos:**
 1. **Unstyled Accessible Primitives (`Radix`, `Base UI`, `React Aria`)** are mandatory for complex interactive widgets (dialogs, comboboxes, popovers, menus, drawers) so keyboard navigation, focus trapping, and ARIA states never break.
-2. **Design Tokens (`starter-tokens.css` in `umby-craft`)** must override every stock color, font, radius, and border before a single screen renders.
+2. **Design Tokens (`starter-tokens.css` in `craft`)** must override every stock color, font, radius, and border before a single screen renders.
 3. **Effect Primitives** are seasoning: at most **one** signature visual mechanic per page (such as an interactive product stage or subtle scroll-linked hardware reveal), never five competing particle effects.
 
 ---
@@ -47,7 +47,7 @@ When building direct-to-consumer (DTC) flagship stores, multi-vendor marketplace
 
 | Repository | Stack | Best For | Key Engineering Takeaway |
 | :--- | :--- | :--- | :--- |
-| **`vercel/commerce`** | Next.js App Router + Shopify Storefront GraphQL + Tailwind | Ultra-fast headless Shopify storefronts using Server Actions, optimistic cart drawers, and edge caching. | Best starting skeleton for Shopify headless builds. Upgrade its minimal wireframe aesthetic using `umby-craft` + `umby-archetypes/references/ecommerce-conversion.md`. |
+| **`vercel/commerce`** | Next.js App Router + Shopify Storefront GraphQL + Tailwind | Ultra-fast headless Shopify storefronts using Server Actions, optimistic cart drawers, and edge caching. | Best starting skeleton for Shopify headless builds. Upgrade its minimal wireframe aesthetic using `craft` + `archetypes/references/ecommerce-conversion.md`. |
 | **`Shopify/hydrogen`** | Remix / React Router + Oxygen + Storefront API | Official Shopify headless stack with built-in `<Image>`, `<Money>`, `<CartForm>`, optimistic cart hooks, and sub-request caching. | Choose Hydrogen when deploying directly to Shopify Oxygen or requiring deep B2B catalog, multipass, and localized market routing. |
 | **`medusajs/nextjs-starter-medusa`** + **`medusajs/medusa`** | Next.js + Medusa v2 (Node/TS/Postgres) | Self-hosted, fully customizable commerce engine (custom checkout flows, subscriptions, multi-region warehouses, marketplaces). | Best open-source alternative when Shopify's checkout extensibility or fee model is too restrictive. |
 | **`blazity/enterprise-commerce`** | Next.js + Algolia/Meilisearch + Tailwind + Shopify | Large-SKU Amazon-style catalogs needing sub-50ms faceted filtering, instant search autocomplete, and high Lighthouse scores. | Study how URL search params, facet counts, and server-rendered category grids stay fast under thousands of SKUs. |
@@ -65,7 +65,7 @@ Study or fork these real production codebases (not toy boilerplates) to see how 
 | **`dubinc/dub`** | Next.js App Router + Prisma + Tinybird + Stripe + Upstash + Tailwind | High-throughput SaaS dashboards, analytics charts, workspace switchers, API key management, and polished marketing/docs integration. | Gold-standard monorepo (`packages/ui`) showing custom modal systems, clean empty states, domain verification flows, and fast filter bars. |
 | **`calcom/cal.com`** | Next.js + tRPC + Prisma + Turborepo + Tailwind | Complex scheduling, multi-step booking state machines, timezone math, webhook integrations, and embeddable widgets. | Study its booking flow for low-friction, high-conversion stateful form UX and availability edge cases. |
 | **`twentyhq/twenty`** | React + TypeScript + GraphQL + Recoil/Jotai + NestJS | Notion/Linear-grade interactive data grids, inline cell editing, custom keyboard navigation, and kanban boards. | Best open-source reference when building a spreadsheet-like or CRM-grade interactive client workspace. |
-| **`nextjs/saas-starter`** | Next.js + Drizzle + Postgres + Stripe + Auth | Clean, minimal SaaS skeleton without bloated 40-package boilerplate debt. | Ideal clean-slate foundation when starting a greenfield B2B SaaS app from scratch before applying `umby-craft` tokens. |
+| **`nextjs/saas-starter`** | Next.js + Drizzle + Postgres + Stripe + Auth | Clean, minimal SaaS skeleton without bloated 40-package boilerplate debt. | Ideal clean-slate foundation when starting a greenfield B2B SaaS app from scratch before applying `craft` tokens. |
 
 ---
 
@@ -78,13 +78,13 @@ When building developer docs, content engines, SEO hubs, or technical blogs:
 | **`fuma-nama/fumadocs`** | Next.js App Router (or TanStack Start / Astro) + MDX + Shiki | Stripe/Vercel-caliber documentation, interactive OpenAPI playgrounds, instant search, and zero-bloat RSC rendering. | Cleanest open-source docs architecture today. Customize its CSS variables so your docs match your main marketing site seamlessly. |
 | **`withastro/astro`** + **`withastro/starlight`** | Astro + Islands Architecture + Tailwind | Marketing sites, long-form blogs, editorial magazines, and ultra-fast content hubs shipping **0 KB of client JS** by default. | Choose Astro over Next.js whenever the site is 80%+ marketing, editorial, portfolio, or SEO content with isolated interactive islands. |
 | **`shuding/nextra`** | Next.js + MDX | Lightweight developer blogs, RFC hubs, and product documentation. | Simple file-system MDX routing built by Vercel design engineering talent. |
-| **`timlrx/tailwind-nextjs-starter-blog`** | Next.js + Contentlayer/Velite + MDX | Technical blogs with citations, math/KaTeX, code syntax highlighting, tag archives, and RSS/sitemap out of the box. | Strip its default pink accent and apply `umby-craft` editorial serif/sans pairing + `sick-social` blog structure. |
+| **`timlrx/tailwind-nextjs-starter-blog`** | Next.js + Contentlayer/Velite + MDX | Technical blogs with citations, math/KaTeX, code syntax highlighting, tag archives, and RSS/sitemap out of the box. | Strip its default pink accent and apply `craft` editorial serif/sans pairing + `sick-social` blog structure. |
 
 ---
 
 ## 6. Automated Verification, Accessibility & Performance Tooling
 
-| Repository / Tool | Role in the `umby-verify` Gate |
+| Repository / Tool | Role in the `verify` Gate |
 | :--- | :--- |
 | **`microsoft/playwright`** + **`@axe-core/playwright`** | Multi-viewport screenshot capture (`375px`, `768px`, `1440px`, `1920px`), real keyboard navigation tests, and automated WCAG AA/AAA contrast & ARIA audits. |
 | **`GoogleChrome/lighthouse`** / **`unlighthouse`** | Automated site-wide Core Web Vitals (`LCP`, `CLS`, `TBT`), SEO metadata, and asset weight scanning across every route in minutes. |

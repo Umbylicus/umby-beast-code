@@ -1,6 +1,6 @@
 # Website Conversion Copy & Product Microcopy Playbook
 
-Every word on a flagship website (Apple, Stripe, Linear, Shopify, Aesop) does a specific job. Apply these rules whenever `umby-beast-code` generates or upgrades landing pages, storefronts, or application UI.
+Every word on a flagship website (Apple, Stripe, Linear, Shopify, Aesop) does a specific job. Apply these rules whenever `beast-code` generates or upgrades landing pages, storefronts, or application UI.
 
 ---
 

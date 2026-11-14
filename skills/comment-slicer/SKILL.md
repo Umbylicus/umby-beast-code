@@ -4,7 +4,7 @@ description: Cuts comments that cost the reader more than they give, and does it
 license: MIT
 metadata:
   version: "2.0.0"
-  tree: "umby-beast-code"
+  tree: "beast-code"
 ---
 
 # Comment Slicer

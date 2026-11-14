@@ -15,7 +15,7 @@ Eliminating AI slop permanently requires replacing "prompt and pray" with an **e
 
 ## 2. How Multi-Billion-Dollar Web Teams Actually Engineer Quality
 
-Studying the frontend systems of **Apple, Stripe, Linear, Shopify, and Amazon** reveals five distinct pillars that separate flagship websites from templates. Our `umby-beast-code` skill tree encodes all five directly into agent procedures.
+Studying the frontend systems of **Apple, Stripe, Linear, Shopify, and Amazon** reveals five distinct pillars that separate flagship websites from templates. Our `beast-code` skill tree encodes all five directly into agent procedures.
 
 ### Apple: Narrative Pacing, Optical Physics, and Restraint
 * **Contrast Oscillation:** Apple product pages never stack five dark sections of equal height. They alternate deep cinema stages (`#000000` / `#0a0a0c` for hardware/media drama) with high-key editorial breathers (`#f5f5f7` with `#1d1d1f` ink) to reset visual fatigue.
@@ -60,57 +60,57 @@ Every frontier model family exhibits distinct strengths. Our skill tree is **100
 
 | Cognitive Role | Primary Strength Needed | Optimal Model Tier / Examples | How the Skill Tree Uses It |
 | :--- | :--- | :--- | :--- |
-| **Lead Architect & Creative Director** | Long-horizon coherence, subtle aesthetic judgment, nuanced product interviewing, multi-file synthesis | **Claude Opus 5.5** / **Gemini 4 Carbon** / **Fable 5.2** (High reasoning effort) | Runs `umby-beast-code`, `umby-discover`, `umby-architect`, and owns final integration. |
-| **Multimodal Visual & Layout Critic** | Spatial reasoning over rendered screenshots, detecting optical misalignment, contrast & overflow bugs | **Gemini 4 Carbon** / **Claude Opus 5.5** / **Fable 5.2** | Runs `umby-verify` screenshot critique (`agents/umby-design-critic.md`) across 4 viewports in light & dark mode. |
-| **High-Velocity Scoped Builder** | Fast, surgical TypeScript/React/CSS execution against a locked data shape and token spec | **Grok** (high-speed code tier) / **Claude Opus 5.5** / **Gemini 4 Carbon** / **Fable 5.2** | Executes scoped vertical slices via `agents/umby-builder.md` with disjoint file ownership. |
+| **Lead Architect & Creative Director** | Long-horizon coherence, subtle aesthetic judgment, nuanced product interviewing, multi-file synthesis | **Claude Opus 5.5** / **Gemini 4 Carbon** / **Fable 5.2** (High reasoning effort) | Runs `beast-code`, `discover`, `architect`, and owns final integration. |
+| **Multimodal Visual & Layout Critic** | Spatial reasoning over rendered screenshots, detecting optical misalignment, contrast & overflow bugs | **Gemini 4 Carbon** / **Claude Opus 5.5** / **Fable 5.2** | Runs `verify` screenshot critique (`agents/design-critic.md`) across 4 viewports in light & dark mode. |
+| **High-Velocity Scoped Builder** | Fast, surgical TypeScript/React/CSS execution against a locked data shape and token spec | **Grok** (high-speed code tier) / **Claude Opus 5.5** / **Gemini 4 Carbon** / **Fable 5.2** | Executes scoped vertical slices via `agents/builder.md` with disjoint file ownership. |
 | **Human-Voice Copywriter & Editor** | Nuanced cadence, subtext, wit, idiomatic rhythm, strict adherence to negative linguistic constraints | **Claude Opus 5.5** / **Fable 5.2** / **Gemini 4 Carbon** + `sick_social_lint.py` | Runs `sick-social` for X/LinkedIn posts, essays, blogs, headlines, and UI microcopy. |
-| **Adversarial Breaker & Clarity Slicer** | Zero-sycophancy skepticism, hunting edge cases, race conditions, dead comments, and type suppressions | **Cross-Family Model** (e.g., if Lead is Claude, use Gemini or Grok; if Lead is Gemini, use Claude or Fable) | Runs `comment-slicer` (`agents/comment-slicer.md`) and `umby-arena` adversarial interrogation. |
+| **Adversarial Breaker & Clarity Slicer** | Zero-sycophancy skepticism, hunting edge cases, race conditions, dead comments, and type suppressions | **Cross-Family Model** (e.g., if Lead is Claude, use Gemini or Grok; if Lead is Gemini, use Claude or Fable) | Runs `comment-slicer` (`agents/comment-slicer.md`) and `arena` adversarial interrogation. |
 
 ---
 
-## 5. Architecture of the `umby-beast-code` Universal Skill Tree
+## 5. Architecture of the `beast-code` Universal Skill Tree
 
 Rather than stuffing 15,000 words into a single monolithic prompt that starves context, the skill tree uses **Progressive Disclosure** (`SKILL.md` frontmatter discovery + on-demand leaf skills + `references/` manuals + `scripts/` deterministic verifiers):
 
 ```text
                          ┌──────────────────────┐
-                         │       umby-beast-code       │  ◄── Invoke this ONE skill for any
+                         │       beast-code       │  ◄── Invoke this ONE skill for any
                          │ (Master Orchestrator)│      website or web app build/update
                          └──────────┬───────────┘
                                     │
         ┌───────────────────────────┼───────────────────────────┐
         ▼                           ▼                           ▼
 ┌───────────────┐           ┌───────────────┐           ┌───────────────┐
-│ umby-discover │           │ umby-evolve   │           │   umby-help   │
+│ discover │           │ evolve   │           │   skill-router   │
 │ (Brief & Dir.)│           │ (Update Sites)│           │(Sharpen/Setup)│
 └───────┬───────┘           └───────┬───────┘           └───────────────┘
         │                           │
         ▼                           ▼
 ┌───────────────┐           ┌───────────────┐           ┌───────────────┐
-│umby-architect │──────────►│  umby-craft   │──────────►│  umby-motion  │
+│architect │──────────►│  craft   │──────────►│  motion  │
 │(Domain & Stack│           │(OKLCH/Type/UI)│           │(Springs/Scroll│
 └───────┬───────┘           └───────┬───────┘           └───────┬───────┘
         │                           │                           │
         └───────────────────────────┼───────────────────────────┘
                                     ▼
                          ┌──────────────────────┐
-                         │   umby-archetypes    │
+                         │   archetypes    │
                          │(Apple/Shopify/Linear)│
                          └──────────┬───────────┘
                                     │
         ┌───────────────────────────┼───────────────────────────┐
         ▼                           ▼                           ▼
 ┌───────────────┐           ┌───────────────┐           ┌───────────────┐
-│  umby-arena   │           │  sick-social  │           │ comment-slicer │
+│  arena   │           │  sick-social  │           │ comment-slicer │
 │(Bakeoff/Critic│           │(Human Writing)│           │(Clarity/Slop) │
 └───────┬───────┘           └───────┬───────┘           └───────┬───────┘
         │                           │                           │
         └───────────────────────────┼───────────────────────────┘
                                     ▼
                          ┌──────────────────────┐
-                         │     umby-verify      │
+                         │     verify      │
                          │(4-Viewport/CWV/SEO)  │
                          └──────────────────────┘
 ```
 
-Every leaf skill works both **automatically** when `umby-beast-code` routes to it AND **standalone** when you invoke it directly (for example, calling `/sick-social` to draft a launch blog post or X thread, or calling `/comment-slicer` to purge slop from a pull request).
+Every leaf skill works both **automatically** when `beast-code` routes to it AND **standalone** when you invoke it directly (for example, calling `/sick-social` to draft a launch blog post or X thread, or calling `/comment-slicer` to purge slop from a pull request).
