@@ -2,12 +2,18 @@
 name: sick-social
 description: Writes magnetic, unmistakably human social media posts (Facebook, Instagram, Google Business Profile, X/Twitter, LinkedIn, Threads, Reddit, Hacker News), long-form blog posts, founder essays, changelogs, and high-converting website copy with zero AI slop. Enforces high sentence burstiness, concrete lived details, spiky points of view, platform-native pacing, and a strict ban on AI vocabulary, em-dash chains, 'not X but Y' contrasts, LinkedIn broetry, and generic throat-clearing—verified deterministically by 'sick_social_lint.py'. Use directly via '/sick-social' or whenever drafting any social post, blog article, or website copy.
 license: MIT
+major: true
 metadata:
-  version: "1.0.0"
-  tree: "umby-beast-code"
+  version: "1.1.0"
+  tree: "beast-code"
+  role: orchestrator
 ---
 
 # Sick Social: Human-Cadence Social, Blog & Web Copy Engine
+
+## Skill selection (every task)
+
+Follow the shared procedure in [`../beast-code/references/select-skills.md`](../beast-code/references/select-skills.md) using [`../beast-code/SKILLS-INDEX.md`](../beast-code/SKILLS-INDEX.md) before drafting. State the roster. Load `discover` when the brief has no raw material, `archetypes` for landing-page structure, `craft` when the copy lives in a UI, `comment-slicer` if you also touch code, `verify` if the words ship on a page, `ship` if this task opens a PR.
 
 Language models default to the statistical midpoint of corporate blogs and LinkedIn hustle threads: uniform 15-word sentences, hollow contrast formulas (*"It's not about X. It's about Y."*), em-dashes everywhere, safe opinions nobody could disagree with, and neat TED-talk endings.
 

@@ -11,6 +11,7 @@ Checks:
 from __future__ import annotations
 
 import json
+import os
 import re
 import subprocess
 import sys
@@ -18,26 +19,33 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+MAJOR_SKILLS = {
+    "beast-code",
+    "critic-mode",
+    "game-mode",
+    "sick-social",
+    "arena",
+}
 EXPECTED_SKILLS = {
-    "umby-beast-code",
-    "umby-discover",
-    "umby-plan",
-    "umby-architect",
-    "umby-backend",
-    "umby-craft",
-    "umby-motion",
-    "umby-archetypes",
-    "umby-evolve",
-    "umby-arena",
-    "umby-debug",
-    "umby-secure",
-    "umby-verify",
-    "umby-ship",
-    "umby-critic-mode",
-    "umby-game-mode",
+    "beast-code",
+    "discover",
+    "build-plan",
+    "architect",
+    "backend",
+    "craft",
+    "motion",
+    "archetypes",
+    "evolve",
+    "arena",
+    "debug",
+    "secure",
+    "verify",
+    "ship",
+    "critic-mode",
+    "game-mode",
     "comment-slicer",
     "sick-social",
-    "umby-help",
+    "skill-router",
 }
 
 MD_LINK_RE = re.compile(r"\[[^\]]+\]\(([^)#\s]+)(?:#[^)]*)?\)")
@@ -56,6 +64,106 @@ def parse_frontmatter(text: str) -> dict[str, str]:
             k, v = line.split(":", 1)
             result[k.strip()] = v.strip().strip('"').strip("'")
     return result
+
+
+def verify_install_targets() -> list[str]:
+    """Install into a temp HOME for every supported target and assert rename + index + no-dupe cleanup."""
+    issues: list[str] = []
+    with tempfile.TemporaryDirectory() as tmp:
+        home = Path(tmp) / "home"
+        proj = Path(tmp) / "proj"
+        for rel in [
+            ".claude/skills",
+            ".claude/agents",
+            ".gemini/config/skills",
+            ".cursor/skills",
+            ".cursor/agents",
+            ".codex/skills",
+            ".grok/skills",
+            ".agents/skills",
+        ]:
+            (home / rel).mkdir(parents=True)
+
+        decoy = home / ".claude/skills/umby-jev-browser"
+        decoy.mkdir()
+        (decoy / "SKILL.md").write_text(
+            '---\nname: umby-jev-browser\nmetadata:\n  tree: "umby-jev-stack"\n---\n',
+            encoding="utf-8",
+        )
+        (home / ".claude/skills/umby-craft").symlink_to(ROOT / "skills" / "umby-craft")
+        help_copy = home / ".claude/skills/umby-help"
+        help_copy.mkdir()
+        (help_copy / "SKILL.md").write_text(
+            '---\nname: umby-help\nmetadata:\n  tree: "umby-beast-code"\n---\n',
+            encoding="utf-8",
+        )
+        (home / ".claude/agents/umby-builder.md").symlink_to(ROOT / "agents" / "umby-builder.md")
+        (home / ".claude/agents/umby-design-critic.md").write_text(
+            "---\nname: umby-design-critic\n---\nlegacy copy\n",
+            encoding="utf-8",
+        )
+
+        cmd = [
+            str(ROOT / "install.sh"),
+            "--claude",
+            "--gemini",
+            "--cursor",
+            "--codex",
+            "--grok",
+            "--agents",
+            "--project",
+            str(proj),
+        ]
+        env_result = subprocess.run(
+            cmd,
+            text=True,
+            capture_output=True,
+            check=False,
+            env={**os.environ, "HOME": str(home)},
+        )
+        if env_result.returncode != 0:
+            issues.append(f"install.sh failed: {env_result.stderr or env_result.stdout}")
+            return issues
+
+        skill_dirs = [
+            home / ".claude/skills",
+            home / ".gemini/config/skills",
+            home / ".cursor/skills",
+            home / ".codex/skills",
+            home / ".grok/skills",
+            home / ".agents/skills",
+            proj / ".agents/skills",
+        ]
+        expected = {p.name for p in (ROOT / "skills").iterdir() if p.is_dir() and (p / "SKILL.md").exists()}
+        for sdir in skill_dirs:
+            found = {p.name for p in sdir.iterdir() if p.is_dir() or p.is_symlink()}
+            leaked = [n for n in found if re.search(r"umby|umbi", n, re.I) and n != "umby-jev-browser"]
+            if leaked:
+                issues.append(f"installed skill name still contains umby under {sdir}: {leaked}")
+            missing = expected - found
+            if missing:
+                issues.append(f"install missed skills in {sdir}: {sorted(missing)}")
+            if "umby-jev-browser" not in found and sdir == home / ".claude/skills":
+                issues.append("install removed umby-jev-browser which this repo does not own")
+            if "umby-craft" in found or "umby-help" in found:
+                issues.append(f"legacy umby skill still present in {sdir}")
+            index = sdir / "beast-code" / "SKILLS-INDEX.md"
+            if not index.exists():
+                issues.append(f"missing SKILLS-INDEX.md in {index}")
+            else:
+                body = index.read_text(encoding="utf-8")
+                for name in sorted(expected):
+                    if f"name: {name}" not in body and f"`{name}`" not in body:
+                        issues.append(f"index in {sdir} missing skill {name}")
+
+        if (home / ".claude/agents/umby-builder.md").exists() or (home / ".claude/agents/umby-design-critic.md").exists():
+            issues.append("legacy umby subagent still present in ~/.claude/agents")
+        for agent in ("builder.md", "design-critic.md", "comment-slicer.md"):
+            if not (home / ".claude/agents" / agent).exists():
+                issues.append(f"missing installed subagent {agent}")
+            if not (home / ".cursor/agents" / agent).exists():
+                issues.append(f"missing installed subagent {agent} in cursor")
+    return issues
 
 
 def run_cmd(cmd: list[str], stdin_text: str | None = None) -> subprocess.CompletedProcess[str]:
@@ -93,6 +201,40 @@ def main() -> int:
             failures.append(f"{skill_name}: invalid universal skill name '{name}'")
         if not desc or len(desc) > 1024:
             failures.append(f"{skill_name}: missing or >1024 char description ({len(desc)} chars)")
+        if re.search(r"umby|umbi", skill_name, re.I) or re.search(r"umby|umbi", name, re.I):
+            failures.append(f"{skill_name}: skill name still contains umby/umbi")
+        if skill_name in MAJOR_SKILLS:
+            if "select-skills.md" not in content:
+                failures.append(f"{skill_name}: major skill missing shared select-skills.md pointer")
+            if "SKILLS-INDEX.md" not in content:
+                failures.append(f"{skill_name}: major skill missing SKILLS-INDEX.md pointer")
+
+    agents_dir = ROOT / "agents"
+    for agent_file in agents_dir.glob("*.md"):
+        afm = parse_frontmatter(agent_file.read_text(encoding="utf-8"))
+        aname = afm.get("name", agent_file.stem)
+        if re.search(r"umby|umbi", agent_file.stem, re.I) or re.search(r"umby|umbi", aname, re.I):
+            failures.append(f"{agent_file.name}: subagent name still contains umby/umbi")
+
+    game_skill = (skills_dir / "game-mode" / "SKILL.md").read_text(encoding="utf-8")
+    for needle in ("planning-interview.md", "docs/game-plan.md", "select-skills.md"):
+        if needle not in game_skill:
+            failures.append(f"game-mode SKILL.md missing required {needle}")
+
+    idx = run_cmd([sys.executable, str(ROOT / "scripts/generate_skills_index.py"), "--check"])
+    if idx.returncode != 0:
+        failures.append(f"SKILLS-INDEX.md stale or missing: {idx.stdout}{idx.stderr}")
+
+    umby_hits: list[str] = []
+    for f in skills_dir.rglob("*"):
+        if not f.is_file() or f.suffix not in {".md", ".py", ".css", ".sh"}:
+            continue
+        text = f.read_text(encoding="utf-8", errors="ignore")
+        for i, line in enumerate(text.splitlines(), start=1):
+            if re.search(r"umby|umbi", line, re.I) and "Umby Marketing" not in line:
+                umby_hits.append(f"{f.relative_to(ROOT)}:{i}: {line.strip()}")
+    if umby_hits:
+        failures.append("umby/umbi remains in skill folders (only client-context 'Umby Marketing' is allowed):\n    " + "\n    ".join(umby_hits[:20]))
 
     # 2. Check markdown relative links across skills/, agents/, adapters/, docs/
     for folder in ["skills", "agents", "adapters", "docs"]:
@@ -123,7 +265,7 @@ def main() -> int:
         tmp_path = Path(tmp)
 
         # 4a. preflight_recon.py
-        recon = run_cmd([sys.executable, str(ROOT / "skills/umby-beast-code/scripts/preflight_recon.py"), str(tmp_path), "--json"])
+        recon = run_cmd([sys.executable, str(ROOT / "skills/beast-code/scripts/preflight_recon.py"), str(tmp_path), "--json"])
         if recon.returncode != 0 or '"empty-directory"' not in recon.stdout:
             failures.append(f"preflight_recon.py failed empty dir test: {recon.stderr or recon.stdout}")
 
@@ -133,7 +275,7 @@ def main() -> int:
             'export function Hero() { return <div onClick={() => {}} className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">Trusted by 10,000+ happy users <a href="#">Start</a></div>; }\n',
             encoding="utf-8",
         )
-        ui_fail = run_cmd([sys.executable, str(ROOT / "skills/umby-craft/scripts/audit_ui_slop.py"), str(sloppy_tsx)])
+        ui_fail = run_cmd([sys.executable, str(ROOT / "skills/craft/scripts/audit_ui_slop.py"), str(sloppy_tsx)])
         if ui_fail.returncode == 0:
             failures.append("audit_ui_slop.py unexpectedly PASSED a sloppy TSX fixture")
 
@@ -142,7 +284,7 @@ def main() -> int:
             'export function Hero() { return <section className="bg-[var(--bg-canvas)]"><button type="button">Open live sandbox</button></section>; }\n',
             encoding="utf-8",
         )
-        ui_pass = run_cmd([sys.executable, str(ROOT / "skills/umby-craft/scripts/audit_ui_slop.py"), str(clean_tsx), "--strict"])
+        ui_pass = run_cmd([sys.executable, str(ROOT / "skills/craft/scripts/audit_ui_slop.py"), str(clean_tsx), "--strict"])
         if ui_pass.returncode != 0:
             failures.append(f"audit_ui_slop.py failed clean TSX fixture: {ui_pass.stdout}")
 
@@ -188,7 +330,7 @@ def main() -> int:
         # 4e. verify_surface_readiness.py (bad HTML must FAIL, valid HTML must PASS)
         bad_html = tmp_path / "bad.html"
         bad_html.write_text("<html><head><title>React App</title></head><body><img src='a.png'><a href='#'>x</a></body></html>", encoding="utf-8")
-        surf_fail = run_cmd([sys.executable, str(ROOT / "skills/umby-verify/scripts/verify_surface_readiness.py"), str(bad_html)])
+        surf_fail = run_cmd([sys.executable, str(ROOT / "skills/verify/scripts/verify_surface_readiness.py"), str(bad_html)])
         if surf_fail.returncode == 0:
             failures.append("verify_surface_readiness.py unexpectedly PASSED bad HTML")
 
@@ -203,13 +345,13 @@ def main() -> int:
             '<a href="/sandbox">Open live sandbox</a></main></body></html>',
             encoding="utf-8",
         )
-        surf_pass = run_cmd([sys.executable, str(ROOT / "skills/umby-verify/scripts/verify_surface_readiness.py"), str(good_html)])
+        surf_pass = run_cmd([sys.executable, str(ROOT / "skills/verify/scripts/verify_surface_readiness.py"), str(good_html)])
         if surf_pass.returncode != 0:
             failures.append(f"verify_surface_readiness.py failed good HTML:\n{surf_pass.stdout}")
 
 
         # 4f. critic_graph.py (bad round rejected, low round CONTINUE, passing round PASS, graph written)
-        cg = str(ROOT / "skills/umby-critic-mode/scripts/critic_graph.py")
+        cg = str(ROOT / "skills/critic-mode/scripts/critic_graph.py")
         cdir = tmp_path / "critic"
         bad_round = tmp_path / "bad_round.json"
         bad_round.write_text(json.dumps({"level": "A", "scores": [{"aspect": "Speed", "benchmark": "X", "score": 11}]}), encoding="utf-8")
@@ -234,7 +376,7 @@ def main() -> int:
             failures.append("critic_graph.py did not write graph.html and scoreboard.md")
 
         # 4g. game_scaffold.py (fresh scaffold passes check, unlisted asset fails it)
-        gs = str(ROOT / "skills/umby-game-mode/scripts/game_scaffold.py")
+        gs = str(ROOT / "skills/game-mode/scripts/game_scaffold.py")
         game = tmp_path / "game"
         if run_cmd([sys.executable, gs, "init", str(game), "--engine", "phaser"]).returncode != 0:
             failures.append("game_scaffold.py init failed")
@@ -243,8 +385,16 @@ def main() -> int:
         (game / "assets/sprites/Hero Idle.png").write_bytes(b"x")
         if run_cmd([sys.executable, gs, "check", str(game)]).returncode == 0:
             failures.append("game_scaffold.py check passed with an unlisted, badly named asset")
+        if not (game / "docs/game-plan.md").exists():
+            failures.append("game_scaffold.py init did not write docs/game-plan.md")
+        for extra_engine in ("canvas", "unity", "react-native", "pixi"):
+            extra = tmp_path / extra_engine
+            if run_cmd([sys.executable, gs, "init", str(extra), "--engine", extra_engine]).returncode != 0:
+                failures.append(f"game_scaffold.py init failed for engine {extra_engine}")
 
-    print("=== UMBY BEAST CODE SKILL TREE VALIDATION ===")
+    failures.extend(verify_install_targets())
+
+    print("=== BEAST CODE SKILL TREE VALIDATION ===")
     print(f"Skills Validated : {len(found_skills)} / {len(EXPECTED_SKILLS)} ({', '.join(sorted(found_skills))})")
     if failures:
         print(f"VERDICT: FAIL ({len(failures)} issue(s))")
